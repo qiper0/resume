@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>夏财洪 - 安装工程造价/机电BIM工程师</title>
+    <meta name="description" content="夏财洪的个人简历 - 8年工程经验，专注于安装工程造价与机电BIM技术融合的复合型人才">
+    <meta name="keywords" content="安装造价,BIM工程师,工程造价,机电BIM,夏财洪,简历">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.4;
+            font-size: 13px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        /* 简历容器 */
+        .resume-container {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            margin: 20px auto;
+            padding: 20px 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        /* 头部区域 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #1a3a8f;
+        }
+        
+        .name-title {
+            flex: 1;
+        }
+        
+        .name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a3a8f;
+            margin-bottom: 5px;
+        }
+        
+        .title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2d5cc2;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.3;
+        }
+        
+        .contact-info {
+            text-align: right;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        
+        .contact-item {
+            margin-bottom: 3px;
+        }
+        
+        /* 核心优势区域 */
+        .highlights {
+            background: #f8fafd;
+            border-left: 3px solid #2d5cc2;
+            padding: 10px 12px;
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .highlight-item {
+            padding-left: 15px;
+            position: relative;
+            line-height: 1.3;
+        }
+        
+        .highlight-item:before {
+            content: "✓";
+            color: #2d5cc2;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            font-size: 11px;
+        }
+        
+        /* 主要内容区域 */
+        .main-content {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .left-column {
+            flex: 2;
+        }
+        
+        .right-column {
+            flex: 1;
+        }
+        
+        /* 通用部分样式 */
+        .section {
+            margin-bottom: 18px;
+        }
+        
+        .section-title {
+            font-size: 15px;
+            color: #1a3a8f;
+            font-weight: 700;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eaeef5;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 35px;
+            height: 2px;
+            background: #2d5cc2;
+        }
+        
+        /* 工作经历样式 */
+        .experience-item {
+            margin-bottom: 16px;
+        }
+        
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .exp-company {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+        }
+        
+        .exp-period {
+            color: #666;
+            font-size: 11px;
+            background: #eef2ff;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .exp-position {
+            color: #2d5cc2;
+            font-size: 12px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .exp-content {
+            font-size: 12px;
+            color: #555;
+        }
+        
+        .exp-highlights {
+            margin-top: 8px;
+            padding-left: 15px;
+        }
+        
+        .exp-highlights li {
+            font-size: 11.5px;
+            margin-bottom: 4px;
+            color: #444;
+            position: relative;
+            line-height: 1.35;
+        }
+        
+        .exp-highlights li:before {
+            content: "›";
+            color: #2d5cc2;
+            font-size: 10px;
+            position: absolute;
+            left: -12px;
+        }
+        
+        .exp-achievement {
+            background: #f0f7ff;
+            padding: 8px 10px;
+            margin-top: 8px;
+            border-radius: 4px;
+            font-size: 11.5px;
+            border-left: 2px solid #2d5cc2;
+            line-height: 1.35;
+        }
+        
+        /* 技能部分样式 */
+        .skill-category {
+            margin-bottom: 15px;
+        }
+        
+        .skill-category-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .skill-category-title:before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #2d5cc2;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .skill-items {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+        
+        .skill-items li {
+            font-size: 11.5px;
+            margin-bottom: 4px;
+            padding-left: 12px;
+            position: relative;
+            line-height: 1.35;
+        }
+        
+        .skill-items li:before {
+            content: "•";
+            color: #2d5cc2;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            font-size: 11px;
+        }
+        
+        /* 证书部分样式 */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 12px;
+            margin-bottom: 15px;
+        }
+        
+        .cert-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+        }
+        
+        .cert-icon {
+            width: 20px;
+            height: 20px;
+            background: #2d5cc2;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+        
+        /* 基本信息网格 */
+        .compact-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .compact-table td {
+            padding: 4px 0;
+            vertical-align: top;
+            line-height: 1.35;
+        }
+        
+        .compact-table .label {
+            font-weight: 600;
+            color: #555;
+            width: 40%;
+            padding-right: 10px;
+        }
+        
+        /* 工作地点样式 */
+        .location-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        
+        .location-tag {
+            background: #f0f7ff;
+            color: #1a3a8f;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            border: 1px solid #d6e4ff;
+            line-height: 1.2;
+        }
+        
+        .location-tag.main {
+            background: #2d5cc2;
+            color: white;
+            font-weight: 500;
+        }
+        
+        /* 自我评价样式 */
+        .summary {
+            font-size: 12px;
+            color: #444;
+            line-height: 1.45;
+            text-align: justify;
+            background: #f8fafd;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border-left: 3px solid #2d5cc2;
+            margin-bottom: 15px;
+        }
+        
+        .summary p {
+            margin-bottom: 8px;
+        }
+        
+        .summary-list {
+            margin: 8px 0 8px 20px;
+        }
+        
+        .summary-list li {
+            margin-bottom: 5px;
+            line-height: 1.35;
+            font-size: 11.5px;
+        }
+        
+        /* 页脚样式 */
+        .footer {
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid #eaeef5;
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+        }
+        
+        /* 高亮关键词 */
+        .highlight {
+            color: #1a3a8f;
+            font-weight: 600;
+        }
+        
+        /* 成就徽章样式 */
+        .badge {
+            display: inline-block;
+            background: #e6f7ff;
+            color: #1a3a8f;
+            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 8px;
+            margin-left: 5px;
+            border: 1px solid #bae7ff;
+        }
+        
+        /* 薪资期望样式 */
+        .salary-expectation {
+            background: #f0f7ff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            border-left: 2px solid #2d5cc2;
+            line-height: 1.35;
+        }
+        
+        /* 附加信息样式 */
+        .additional-info {
+            font-size: 11.5px;
+            color: #555;
+            line-height: 1.35;
+            background: #f8fafd;
+            padding: 10px 12px;
+            border-radius: 4px;
+            border: 1px solid #eaeef5;
+        }
+        
+        .additional-info div {
+            margin-bottom: 3px;
+        }
+        
+        /* 打印按钮样式 */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2d5cc2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .print-btn:hover {
+            background: #1a3a8f;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .resume-container {
+                width: 95%;
+                margin: 10px auto;
+                padding: 15px;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .header {
+                flex-direction: column;
+            }
+            
+            .contact-info {
+                text-align: left;
+                margin-top: 10px;
+            }
+            
+            .highlights {
+                grid-template-columns: 1fr;
+            }
+            
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .print-btn {
+                position: static;
+                display: block;
+                margin: 20px auto;
+                width: 200px;
+            }
+        }
+        
+        /* 打印样式 */
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .resume-container {
+                width: 100%;
+                height: auto;
+                min-height: 100%;
+                margin: 0;
+                padding: 15mm 15mm;
+                box-shadow: none;
+            }
+            
+            .print-btn {
+                display: none;
+            }
+            
+            .highlight {
+                font-weight: bold;
+            }
+            
+            .summary, .additional-info, .salary-expectation, .highlights, .exp-achievement {
+                background: #f8fafd !important;
+            }
+            
+            .location-tag.main {
+                background: #2d5cc2 !important;
+                color: white !important;
+            }
+        }
+        
+        /* 图标 */
+        .icon {
+            display: inline-block;
+            width: 14px;
+            text-align: center;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 打印按钮 -->
+    <button class="print-btn" onclick="window.print()">
+        🖨️ 打印/保存为PDF
+    </button>
+    
+    <div class="resume-container">
+        <!-- 头部信息 -->
+        <div class="header">
+            <div class="name-title">
+                <h1 class="name">夏财洪</h1>
+                <div class="title">安装工程造价 / 机电BIM工程师</div>
+                <div class="subtitle">8年工程经验 | 造价+BIM+计算机复合型人才 | 独立承担大型项目造价管理</div>
+            </div>
+            
+            <div class="contact-info">
+                <div class="contact-item"><span class="icon">📱</span> 136-6829-2381</div>
+                <div class="contact-item"><span class="icon">✉️</span> 1757526216@qq.com</div>
+                <div class="contact-item"><span class="icon">📍</span> 成都及周边，可接受项目驻场</div>
+                <div class="contact-item"><span class="icon">🌐</span> <span id="site-url">正在加载...</span></div>
+            </div>
+        </div>
+        
+        <!-- 核心优势区域 -->
+        <div class="highlights">
+            <div class="highlight-item">8年安装造价+BIM复合经验</div>
+            <div class="highlight-item">二级安装造价工程师+BIM高级建模师</div>
+            <div class="highlight-item">精通广联达、Revit等20+专业软件</div>
+            <div class="highlight-item">参与21万㎡EPC项目全过程管理</div>
+            <div class="highlight-item">独立完成全流程造价工作</div>
+            <div class="highlight-item">技术跨界融合创新能力强</div>
+        </div>
+        
+        <!-- 主要内容 - 两栏布局 -->
+        <div class="main-content">
+            <!-- 左栏：工作经历、技能 -->
+            <div class="left-column">
+                <!-- 工作经历 -->
+                <section class="section">
+                    <h2 class="section-title">工作经历与项目成就</h2>
+                    
+                    <div class="experience-item">
+                        <div class="exp-header">
+                            <div class="exp-company">新疆创时代建设工程四川分公司</div>
+                            <div class="exp-period">2024.05 - 至今</div>
+                        </div>
+                        <div class="exp-position">安装造价工程师 <span class="badge">10k+</span></div>
+                        <div class="exp-content">
+                            <ul class="exp-highlights">
+                                <li>广西柳州新能源厂区项目：负责强电专业广联达算量，准确控制预算，偏差率保持在较低水平</li>
+                                <li>陕西石化、南充石油项目：编制投标清单，协助公司成功中标多个大型项目</li>
+                                <li>成都双流房建项目：完成全专业算量、材料询价、清单组价及调价工作</li>
+                                <li>新疆昌吉机房改造及房地产项目：负责消防专业算量及清单编制</li>
+                            </ul>
+                            <div class="exp-achievement">
+                                <strong>项目成果：</strong>跨区域同时管理多个项目，按时完成所有计量任务，获得甲方好评
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="experience-item">
+                        <div class="exp-header">
+                            <div class="exp-company">四川贤达建设工程有限公司</div>
+                            <div class="exp-period">2022.07 - 2023.06</div>
+                        </div>
+                        <div class="exp-position">安装造价工程师（驻场） <span class="badge">11k</span></div>
+                        <div class="exp-content">
+                            <ul class="exp-highlights">
+                                <li>雅安21万㎡大型EPC房建项目：从开工到管道设备安装阶段全过程造价管理</li>
+                                <li>水电算王软件算量、宏业清单组价，通过软件结合提升算量效率</li>
+                                <li>过控对接、分包管理、材料询价，严格控制项目成本</li>
+                                <li>产值报送、图审对接，确保项目各阶段资金流转顺畅</li>
+                            </ul>
+                            <div class="exp-achievement">
+                                <strong>项目成果：</strong>驻场期间建立完整的项目造价管理体系，被公司采纳并推广至其他项目
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="experience-item">
+                        <div class="exp-header">
+                            <div class="exp-company">四川通捷建设工程有限公司</div>
+                            <div class="exp-period">2021.03 - 2022.06</div>
+                        </div>
+                        <div class="exp-position">BIM工程师/安装造价 <span class="badge">9k</span></div>
+                        <div class="exp-content">
+                            <ul class="exp-highlights">
+                                <li>浙江过江隧道项目：参与ICONICS大屏界面化设计、Rhino建模、Enscape渲染</li>
+                                <li>广西至武汉高速项目：负责弱电智能化设计、QGis的Three.js轻量化模型标记摄像机点位</li>
+                                <li>自贡水务项目：自来水厂加压站设计、市政项目抢修工程量计算</li>
+                                <li>公司信息化建设：搭建公司网站、维护公众号、开发网页轻量化模型展示平台</li>
+                            </ul>
+                            <div class="exp-achievement">
+                                <strong>技术贡献：</strong>将BIM技术与造价工作深度结合，为多个项目提供创新解决方案
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="experience-item">
+                        <div class="exp-header">
+                            <div class="exp-company">机械工业第六设计研究院四川分公司</div>
+                            <div class="exp-period">2018.06 - 2021.02</div>
+                        </div>
+                        <div class="exp-position">BIM工程师 <span class="badge">6k</span></div>
+                        <div class="exp-content">
+                            <ul class="exp-highlights">
+                                <li>成都万华麓湖项目：BIM管线综合调整、精细化调整、BIM明细表工程量统计</li>
+                                <li>海南政务中心项目：广联达BIM5D应用、参与BIM投标资料编制、Navisworks动画制作</li>
+                                <li>雅安仿古房建项目：Revizto轻量化模型部署、BIMFace网页轻量化模型开发</li>
+                                <li>成都双流实验室项目：斯维尔BIM5D应用、参与图纸会审、驻场问题处理</li>
+                            </ul>
+                            <div class="exp-achievement">
+                                <strong>技术成果：</strong>从零建立公司BIM实施能力，独立完成多个大型项目BIM应用
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 专业技能 -->
+                <section class="section">
+                    <h2 class="section-title">专业技能</h2>
+                    
+                    <div class="skill-category">
+                        <div class="skill-category-title">安装造价（精通）</div>
+                        <ul class="skill-items">
+                            <li><strong>计量软件：</strong>广联达（全专业）、鹏业、算王、鲁班、斯维尔、Excel高级应用</li>
+                            <li><strong>组价软件：</strong>宏业、新点、同望、各地定额及清单计价规范</li>
+                            <li><strong>全过程管理：</strong>成本分析与控制、投标报价、变更签证处理、竣工结算编制</li>
+                            <li><strong>专业能力：</strong>安装全专业（给排水、电气、消防、暖通）算量与计价</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <div class="skill-category-title">机电BIM（精通）</div>
+                        <ul class="skill-items">
+                            <li><strong>核心软件：</strong>Revit（建族、参数化、管线综合）、Navisworks（碰撞检查、4D模拟）</li>
+                            <li><strong>辅助工具：</strong>Dynamo（参数化编程）、BIM5D（进度与造价管理）、Fuzor、Enscape</li>
+                            <li><strong>建模能力：</strong>Rhino、Sketchup、3DS Max、CAD二次开发</li>
+                            <li><strong>应用能力：</strong>轻量化模型部署、BIM工程量统计、三维可视化交底、BIM标准制定</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <div class="skill-category-title">计算机技术（熟练）</div>
+                        <ul class="skill-items">
+                            <li><strong>编程开发：</strong>SQL数据库设计、Java/PHP编程、网站搭建、API接口开发</li>
+                            <li><strong>三维可视化：</strong>Web 3D开发（Three.js）、轻量化模型部署、VR/AR技术应用</li>
+                            <li><strong>系统管理：</strong>服务器维护（Windows/Linux）、网络故障排除、数据备份与恢复</li>
+                            <li><strong>办公自动化：</strong>Excel高级函数与透视表、Word大纲目录审阅、VBA宏编程</li>
+                        </ul>
+                    </div>
+                </section>
+                <!-- 附加信息 -->
+                <div class="additional-info">
+                    <div><strong>附加信息：</strong></div>
+                    <div>• 可接受短期出差和项目驻场（有21万㎡EPC项目驻场经验）</div>
+                    <div>• 可提供过往项目作品集（BIM模型、造价文件样例、项目成果展示）</div>
+                    <div>• 最快到岗时间：1-2周（在职状态）</div>
+                    <div>• 面试时可进行软件操作演示（广联达、Revit、相关BIM软件等）</div>
+                </div>
+            </div>
+            
+            <!-- 右栏：基本信息、证书、地点、自我评价 -->
+            <div class="right-column">
+                <!-- 基本信息 -->
+                <section class="section">
+                    <h2 class="section-title">基本信息</h2>
+                    <table class="compact-table">
+                        <tr>
+                            <td class="label">性别/年龄</td>
+                            <td>男 / 34岁</td>
+                        </tr>
+                        <tr>
+                            <td class="label">婚姻状况</td>
+                            <td>已婚</td>
+                        </tr>
+                        <tr>
+                            <td class="label">学 历</td>
+                            <td>大专（四川建筑职业技术学院）<br>专升本在读（电子科技大学计算机专业）</td>
+                        </tr>
+                        <tr>
+                            <td class="label">工作年限</td>
+                            <td>8年（2016年至今）</td>
+                        </tr>
+                        <tr>
+                            <td class="label">专业领域</td>
+                            <td>安装造价、机电BIM、<br>计算机技术应用</td>
+                        </tr>
+                        <tr>
+                            <td class="label">驾驶执照</td>
+                            <td>C1（2020年取得）</td>
+                        </tr>
+                    </table>
+                </section>
+                
+                <!-- 证书资质 -->
+                <section class="section">
+                    <h2 class="section-title">证书资质</h2>
+                    <div class="cert-grid">
+                        <div class="cert-item">
+                            <div class="cert-icon">★</div>
+                            <div>
+                                <div><strong>二级安装造价工程师</strong></div>
+                                <div style="font-size: 10px; color: #666;">2022年6月 | 四川省住建厅</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cert-item">
+                            <div class="cert-icon">★</div>
+                            <div>
+                                <div><strong>BIM高级建模师</strong></div>
+                                <div style="font-size: 10px; color: #666;">2019年3月 | 全国BIM等级认证</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cert-item">
+                            <div class="cert-icon">★</div>
+                            <div>
+                                <div><strong>BIM技能等级二级</strong></div>
+                                <div style="font-size: 10px; color: #666;">2018年12月 | 国家人社部</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cert-item">
+                            <div class="cert-icon">★</div>
+                            <div>
+                                <div><strong>机电安装助理工程师</strong></div>
+                                <div style="font-size: 10px; color: #666;">2021年1月 | 专业技术职称</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 期望工作地点 -->
+                <section class="section">
+                    <h2 class="section-title">期望工作地点</h2>
+                    <div class="location-tags">
+                        <span class="location-tag main">大邑县</span>
+                        <span class="location-tag main">邛崃市</span>
+                        <span class="location-tag main">新津区</span>
+                        <span class="location-tag main">蒲江县</span>
+                        <span class="location-tag">眉山市</span>
+                        <span class="location-tag">雅安市</span>
+                        <span class="location-tag">成都市</span>
+                    </div>
+                    <div style="font-size: 10.5px; color: #666; line-height: 1.2; margin-top: 5px;">
+                        具体区域：晋原、王泗、羊安、新平、五津、寿安、蒲江县城、彭山、名山、雨城等
+                    </div>
+                </section>
+                
+                <!-- 薪资期望 -->
+                <div class="salary-expectation">
+                    <div><strong>薪资期望：</strong>10-13k/月（根据工作内容和地点可议）</div>
+                    <div style="font-size: 11px; color: #666; margin-top: 3px;">具备独立承担大型项目造价管理能力，可为公司创造显著价值</div>
+                </div>
+                
+                <!-- 自我评价 -->
+                <section class="section">
+                    <h2 class="section-title">自我评价</h2>
+                    <div class="summary">
+                        <p>我是一名具备<span class="highlight">8年建筑工程行业经验</span>的复合型技术人才，专业领域覆盖<span class="highlight">安装工程造价</span>、<span class="highlight">机电BIM技术</span>和<span class="highlight">计算机技术应用</span>。不同于传统造价人员，我能够将工程造价、BIM建模和计算机编程技术有机结合，为工程项目提供创新解决方案。</p>
+                        
+                        <p><strong>核心竞争优势：</strong></p>
+                        <ul class="summary-list">
+                            <li><strong>技术跨界融合能力：</strong>熟练掌握造价软件、BIM工具和编程语言，能实现不同技术领域的协同工作，解决复杂工程问题</li>
+                            <li><strong>快速学习与适应能力：</strong>已掌握20+专业软件，对新工具、新方法有快速学习能力，能在短时间内适应不同工作环境</li>
+                            <li><strong>项目全过程管理经验：</strong>从投标报价、成本控制到竣工结算，具备完整的项目造价管理经验，熟悉各阶段关键控制点</li>
+                            <li><strong>创新思维与效率提升：</strong>善于利用技术手段优化工作流程，如开发自动化工具、三维可视化交底方案等，显著提升工作效率</li>
+                        </ul>
+                        
+                        <p><strong>职业发展目标：</strong>在工程行业数字化转型的背景下，我希望能够发挥自身复合技术优势，在安装工程造价与BIM技术深度融合的领域持续深耕，成为既精通传统工程造价又掌握现代数字技术的复合型工程管理人才。</p>
+                    </div>
+                </section>
+                
+            </div>
+        </div>
+        
+        <!-- 页脚 -->
+        <div class="footer">
+            <p>夏财洪 | 安装工程造价/机电BIM工程师 | 136-6829-2381 | 1757526216@qq.com | 最后更新：2024年7月</p>
+            <p style="font-size: 10px; margin-top: 5px;">本简历已部署至GitHub Pages，可通过 https://你的用户名.github.io 在线访问</p>
+        </div>
+    </div>
+
+    <script>
+        // 自动显示当前网站URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const siteUrl = window.location.href;
+            const urlElement = document.getElementById('site-url');
+            
+            if (urlElement) {
+                // 如果是本地文件，显示提示
+                if (siteUrl.startsWith('file://')) {
+                    urlElement.innerHTML = '本地文件 | 部署后显示在线地址';
+                } else {
+                    urlElement.innerHTML = '<a href="' + siteUrl + '" target="_blank">' + siteUrl + '</a>';
+                }
+            }
+            
+            // 打印功能优化
+            const printButton = document.querySelector('.print-btn');
+            if (printButton) {
+                printButton.addEventListener('click', function() {
+                    window.print();
+                });
+            }
+            
+            // 提示用户如何部署
+            console.log('简历代码已准备好！请将本文件上传到GitHub仓库：用户名.github.io');
+        });
+    </script>
+</body>
+</html>
