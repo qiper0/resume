@@ -767,7 +767,7 @@
             const editParam = urlParams.get('edit');
             const fileParam = urlParams.get('file');
             
-            // 决定模式 - 默认加载 readme.md（只读模式）
+            // 决定模式 - 默认加载 README.md（只读模式）
             if (editParam !== null) {
                 // 编辑模式
                 loadFile(editParam, true);
@@ -784,8 +784,8 @@
                 // 只读模式（指定文件）
                 loadFile(fileParam, false);
             } else {
-                // 默认模式：加载 readme.md（只读）
-                loadFile('readme.md', false);
+                // 默认模式：加载 README.md（只读）
+                loadFile('README.md', false);
             }
         }
         
