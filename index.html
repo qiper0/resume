@@ -5,36 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Markdown编辑器</title>
     <style>
-        /* 基础重置 */
+        :root {
+            --primary-color: #4a6fa5;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --border-color: #ddd;
+            --code-bg: #2d3748;
+            --header-color: #2c3e50;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
+            color: var(--text-color);
+            background: var(--bg-color);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            text-size-adjust: 100%;
         }
         
-        /* 编辑模式容器 */
         .editor-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             height: 100vh;
             gap: 1px;
-            background: #ddd;
-            transform: translateZ(0);
-            will-change: transform;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
+            background: var(--border-color);
         }
         
         @media (max-width: 768px) {
@@ -44,835 +45,670 @@
             }
         }
         
-        /* 微信特定优化 */
-        .wechat-optimized .editor-container {
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        /* 文本编辑区域 */
-        .editor-area {
+        .editor-area, .preview-area {
             background: white;
-            padding: 20px;
+            padding: 15px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
         
         #editor {
             width: 100%;
-            height: calc(100vh - 40px);
+            height: calc(100vh - 30px);
             border: none;
             resize: none;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
             font-size: 14px;
             line-height: 1.5;
             outline: none;
             padding: 0;
             background: white;
-            -webkit-overflow-scrolling: touch;
+            tab-size: 4;
         }
         
-        /* 预览区域 */
-        .preview-area {
-            background: white;
-            padding: 1em;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+        @media (max-width: 768px) {
+            #editor {
+                height: calc(50vh - 30px);
+                font-size: 16px;
+            }
         }
         
-        /* 只读预览模式 */
         .view-only {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px 15px;
             background: white;
             min-height: 100vh;
-            -webkit-overflow-scrolling: touch;
         }
         
-        /* Markdown 样式 - 简化版提升性能 */
         .markdown-content {
             font-size: 1em;
             line-height: 1.7;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
-        .markdown-content h1 {
-            font-size: 1.8em;
-            margin: 0.8em 0 0.4em 0;
-            color: #2c3e50;
-            padding-bottom: 0.2em;
-            border-bottom: 1px solid #eee;
+        .markdown-content h1 { 
+            font-size: 1.8em; 
+            margin: 0.8em 0 0.4em; 
+            color: var(--header-color); 
+            border-bottom: 1px solid #eee; 
+            padding-bottom: 0.2em; 
         }
-        
-        .markdown-content h2 {
-            font-size: 1.5em;
-            margin: 1.2em 0 0.4em 0;
-            color: #2c3e50;
-            padding-bottom: 0.2em;
-            border-bottom: 1px solid #eee;
+        .markdown-content h2 { 
+            font-size: 1.5em; 
+            margin: 1.2em 0 0.4em; 
+            color: var(--header-color); 
+            border-bottom: 1px solid #eee; 
+            padding-bottom: 0.2em; 
         }
-        
-        .markdown-content h3 {
-            font-size: 1.3em;
-            margin: 1em 0 0.3em 0;
-            color: #2c3e50;
+        .markdown-content h3 { 
+            font-size: 1.3em; 
+            margin: 1em 0 0.3em; 
+            color: var(--header-color); 
         }
-        
-        .markdown-content h4 {
-            font-size: 1.1em;
-            margin: 0.9em 0 0.3em 0;
-            color: #2c3e50;
+        .markdown-content h4 { 
+            font-size: 1.1em; 
+            margin: 0.9em 0 0.3em; 
+            color: var(--header-color); 
         }
-        
-        .markdown-content p {
-            margin: 0.8em 0;
+        .markdown-content p { 
+            margin: 0.8em 0; 
         }
-        
-        .markdown-content ul, .markdown-content ol {
-            margin: 0.8em 0;
-            padding-left: 1.5em;
+        .markdown-content ul, 
+        .markdown-content ol { 
+            margin: 0.8em 0; 
+            padding-left: 1.5em; 
         }
-        
-        .markdown-content li {
-            margin: 0.4em 0;
+        .markdown-content li { 
+            margin: 0.4em 0; 
         }
-        
-        .markdown-content strong {
-            color: #2c3e50;
-            font-weight: 600;
+        .markdown-content strong { 
+            color: var(--header-color); 
+            font-weight: 600; 
         }
-        
-        .markdown-content em {
-            color: #555;
+        .markdown-content em { 
+            color: #555; 
         }
-        
-        .markdown-content blockquote {
-            border-left: 3px solid #4a6fa5;
-            padding: 0.4em 0.8em;
-            margin: 0.8em 0;
-            background: #f8f9fa;
-            color: #555;
+        .markdown-content blockquote { 
+            border-left: 3px solid var(--primary-color); 
+            padding: 0.4em 0.8em; 
+            margin: 0.8em 0; 
+            background: var(--bg-color); 
+            color: #555; 
         }
-        
-        .markdown-content code {
-            background: #f1f3f5;
-            padding: 2px 4px;
-            border-radius: 2px;
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-            font-size: 0.9em;
+        .markdown-content code { 
+            background: #f1f3f5; 
+            padding: 2px 4px; 
+            border-radius: 2px; 
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; 
+            font-size: 0.9em; 
         }
-        
-        .markdown-content pre {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 0.8em;
-            border-radius: 4px;
+        .markdown-content pre { 
+            background: var(--code-bg); 
+            color: #e2e8f0; 
+            padding: 0.8em; 
+            border-radius: 4px; 
+            overflow-x: auto; 
+            margin: 0.8em 0; 
+            -webkit-overflow-scrolling: touch; 
+        }
+        .markdown-content pre code { 
+            background: none; 
+            padding: 0; 
+            color: inherit; 
+            font-size: 0.9em; 
+        }
+        .markdown-content table { 
+            border-collapse: collapse; 
+            margin: 0.8em 0; 
+            width: 100%; 
             overflow-x: auto;
-            margin: 0.8em 0;
-            -webkit-overflow-scrolling: touch;
+            display: block;
+        }
+        .markdown-content table th, 
+        .markdown-content table td { 
+            border: 1px solid #e1e4e8; 
+            padding: 0.5em 0.8em; 
+            text-align: left; 
+            min-width: 80px;
+        }
+        .markdown-content table th { 
+            background: #f6f8fa; 
+            font-weight: 600; 
+        }
+        .markdown-content table tr:nth-child(even) { 
+            background: #fafbfc; 
+        }
+        .markdown-content .task-list-item { 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 0.5em; 
+        }
+        .markdown-content .task-list-item input[type="checkbox"] { 
+            margin-top: 0.3em; 
+            flex-shrink: 0;
+        }
+        .markdown-content .task-list-item input[type="checkbox"]:checked + span { 
+            text-decoration: line-through; 
+            color: #6a737d; 
+        }
+        .markdown-content del { 
+            text-decoration: line-through; 
+            color: #6a737d; 
+        }
+        .markdown-content img { 
+            max-width: 100%; 
+            height: auto; 
+            margin: 0.8em 0; 
+        }
+        .markdown-content a { 
+            color: #0366d6; 
+            text-decoration: none; 
+            border-bottom: 1px solid rgba(3, 102, 214, 0.2); 
+        }
+        .markdown-content a:hover { 
+            color: #0056b3; 
+            border-bottom-color: #0366d6; 
+        }
+        .markdown-content hr { 
+            border: none; 
+            border-top: 1px solid #eaecef; 
+            margin: 1.5em auto; 
+            width: 80%; 
         }
         
-        .markdown-content pre code {
-            background: none;
-            padding: 0;
-            color: inherit;
-        }
-        
-        /* 简化表格样式 - 移除阴影提升性能 */
-        .markdown-content table {
-            border-collapse: collapse;
-            margin: 0.8em 0;
-            width: 100%;
-        }
-        
-        .markdown-content table th,
-        .markdown-content table td {
-            border: 1px solid #e1e4e8;
-            padding: 0.5em 0.8em;
-            text-align: left;
-        }
-        
-        .markdown-content table th {
-            background: #f6f8fa;
-            font-weight: 600;
-            color: #24292e;
-        }
-        
-        .markdown-content table tr:nth-child(even) {
-            background-color: #fafbfc;
-        }
-        
-        /* 任务列表样式 */
-        .markdown-content .task-list-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5em;
-        }
-        
-        .markdown-content .task-list-item input[type="checkbox"] {
-            margin-top: 0.3em;
-        }
-        
-        .markdown-content .task-list-item input[type="checkbox"]:checked + span {
-            text-decoration: line-through;
-            color: #6a737d;
-        }
-        
-        /* 删除线样式 */
-        .markdown-content del {
-            text-decoration: line-through;
-            color: #6a737d;
-        }
-        
-        /* 简化图片样式 - 移除阴影提升性能 */
-        .markdown-content img {
-            max-width: 100%;
-            height: auto;
-            margin: 0.8em 0;
-        }
-        
-        /* 链接样式 */
-        .markdown-content a {
-            color: #0366d6;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(3, 102, 214, 0.2);
-        }
-        
-        .markdown-content a:hover {
-            color: #0056b3;
-            border-bottom-color: #0366d6;
-        }
-        
-        /* 水平线样式 */
-        .markdown-content hr {
-            border: none;
-            border-top: 1px solid #eaecef;
-            margin: 1.5em auto;
-            width: 80%;
-        }
-        
-        /* 状态提示（自动保存时显示） */
         .save-status {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 16px;
+            right: 16px;
             padding: 6px 12px;
-            background: rgba(74, 111, 165, 0.9);
+            background: rgba(74, 111, 165, 0.95);
             color: white;
-            border-radius: 3px;
+            border-radius: 4px;
             font-size: 13px;
             opacity: 0;
-            transition: opacity 0.15s ease-out;
+            transition: opacity 0.2s ease;
             pointer-events: none;
             z-index: 1000;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
         
-        .save-status.show {
-            opacity: 1;
+        .save-status.show { 
+            opacity: 1; 
+        }
+        .hidden { 
+            display: none !important; 
         }
         
-        /* 隐藏所有元素 */
-        .hidden {
-            display: none !important;
-        }
-        
-        /* 加载中样式 */
+        /* 加载状态 */
         .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100px;
-            color: #666;
-        }
-        
-        /* 性能优化类 */
-        .performance-optimized {
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        /* 移动端优化 */
-        @media (max-width: 768px) {
-            .editor-area, .preview-area {
-                padding: 15px;
-            }
-            
-            #editor {
-                height: calc(50vh - 30px);
-                font-size: 16px; /* 防止iOS缩放 */
-            }
-            
-            .markdown-content {
-                font-size: 16px;
-            }
-            
-            .save-status {
-                bottom: 10px;
-                right: 10px;
-                padding: 4px 8px;
-                font-size: 12px;
-            }
-        }
-        
-        /* 微信优化模式 */
-        .wechat-mode .markdown-content img,
-        .wechat-mode .markdown-content table {
-            box-shadow: none;
-        }
-        
-        .wechat-mode .markdown-content pre {
-            overflow-x: scroll;
-            -webkit-overflow-scrolling: touch;
+            opacity: 0.6;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <!-- 编辑模式 -->
     <div id="editMode" class="editor-container hidden">
         <div class="editor-area">
-            <textarea id="editor" placeholder="在这里编辑Markdown文档..."></textarea>
+            <textarea id="editor" placeholder="在这里编辑Markdown文档..." spellcheck="false"></textarea>
         </div>
         <div class="preview-area">
             <div id="preview" class="markdown-content"></div>
         </div>
     </div>
     
-    <!-- 只读预览模式 -->
     <div id="viewMode" class="view-only hidden">
         <div id="viewContent" class="markdown-content"></div>
     </div>
     
-    <!-- 自动保存状态提示 -->
     <div id="saveStatus" class="save-status">已保存</div>
 
     <script>
-        // 核心变量
-        let saveTimer = null;
-        let currentContent = '';
-        let isEditing = false;
-        let currentFile = '';
-        let isComposing = false; // 中文输入法状态
-        let isWeChat = false; // 是否是微信浏览器
-        let lastMarkdownText = ''; // 解析缓存
-        let lastParsedHtml = '';
-        
-        // 检测微信浏览器
-        function detectWeChat() {
-            return /micromessenger/i.test(navigator.userAgent);
-        }
-        
-        // 防抖函数
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
+        (function() {
+            'use strict';
+            
+            // 常量配置
+            const CONFIG = {
+                SAVE_DELAY: 5000,
+                PREVIEW_DELAY: 150,
+                WECHAT_PREVIEW_DELAY: 200,
+                WECHAT_SAVE_DELAY: 10000,
+                CACHE_EXPIRY: 60000 // 60秒缓存
             };
-        }
-        
-        // HTML转义
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        // 处理行内Markdown语法
-        function processInlineMarkdown(text) {
-            if (!text) return '';
             
-            let result = text;
+            // 状态管理
+            const state = {
+                saveTimer: null,
+                currentContent: '',
+                isEditing: false,
+                currentFile: '',
+                isComposing: false,
+                isWeChat: /micromessenger/i.test(navigator.userAgent),
+                cache: new Map(),
+                lastCacheTime: 0
+            };
             
-            // 处理加粗和斜体
-            result = result.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
-            result = result.replace(/___(.*?)___/g, '<strong><em>$1</em></strong>');
+            // DOM 元素引用
+            const elements = {
+                editor: document.getElementById('editor'),
+                preview: document.getElementById('preview'),
+                viewContent: document.getElementById('viewContent'),
+                editMode: document.getElementById('editMode'),
+                viewMode: document.getElementById('viewMode'),
+                saveStatus: document.getElementById('saveStatus')
+            };
             
-            result = result.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            result = result.replace(/__(.*?)__/g, '<strong>$1</strong>');
-            
-            result = result.replace(/\*(.*?)\*/g, '<em>$1</em>');
-            result = result.replace(/_(.*?)_/g, '<em>$1</em>');
-            
-            // 处理删除线
-            result = result.replace(/~~(.*?)~~/g, '<del>$1</del>');
-            
-            // 处理行内代码
-            result = result.replace(/`([^`]+)`/g, '<code>$1</code>');
-            
-            // 处理链接 [text](url "title")
-            result = result.replace(/\[([^\]]+)\]\(([^)"]+)(?:\s+"([^"]+)")?\)/g, 
-                (match, text, url, title) => {
-                    const titleAttr = title ? ` title="${title}"` : '';
-                    return `<a href="${url}"${titleAttr} target="_blank">${text}</a>`;
-                });
-            
-            // 处理图片 ![alt](src "title")
-            result = result.replace(/!\[([^\]]*)\]\(([^)"]+)(?:\s+"([^"]+)")?\)/g, 
-                (match, alt, src, title) => {
-                    const titleAttr = title ? ` title="${title}"` : '';
-                    return `<img src="${src}" alt="${alt}"${titleAttr}>`;
-                });
-            
-            // 处理自动链接 <url>
-            result = result.replace(/<([^>]+)>/g, (match, url) => {
-                if (url.match(/^https?:\/\//)) {
-                    return `<a href="${url}" target="_blank">${url}</a>`;
-                } else if (url.match(/^mailto:/)) {
-                    return `<a href="${url}">${url.substring(7)}</a>`;
+            // 工具函数
+            const utils = {
+                debounce(func, wait) {
+                    let timeout;
+                    return function executedFunction(...args) {
+                        const later = () => {
+                            clearTimeout(timeout);
+                            func(...args);
+                        };
+                        clearTimeout(timeout);
+                        timeout = setTimeout(later, wait);
+                    };
+                },
+                
+                escapeHtml(text) {
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                },
+                
+                showSaveStatus(message) {
+                    const el = elements.saveStatus;
+                    el.textContent = message;
+                    el.classList.add('show');
+                    clearTimeout(this.statusTimer);
+                    this.statusTimer = setTimeout(() => {
+                        el.classList.remove('show');
+                    }, 1500);
+                },
+                
+                setLoading(isLoading) {
+                    document.body.classList.toggle('loading', isLoading);
                 }
-                return match;
-            });
+            };
             
-            return result;
-        }
-        
-        // 优化版Markdown解析器（带缓存）
-        function parseMarkdownWithCache(text) {
-            if (text === lastMarkdownText && lastParsedHtml) {
-                return lastParsedHtml;
-            }
-            
-            lastMarkdownText = text;
-            lastParsedHtml = parseMarkdown(text);
-            return lastParsedHtml;
-        }
-        
-        // 基础Markdown解析
-        function parseMarkdown(text) {
-            if (!text) return '';
-            
-            let html = text;
-            
-            // 处理代码块
-            html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
-                const lines = code.trim().split('\n');
-                let language = '';
-                let codeContent = code;
-                
-                if (lines[0].match(/^[a-zA-Z0-9+#-]+$/)) {
-                    language = lines[0].trim();
-                    codeContent = lines.slice(1).join('\n').trim();
-                }
-                
-                return `<pre><code class="language-${language}">${escapeHtml(codeContent)}</code></pre>`;
-            });
-            
-            // 处理缩进代码块
-            html = html.replace(/^( {4,}|\t+)(.*)$/gm, (match, indent, line) => {
-                return '<code>' + escapeHtml(line) + '</code>';
-            });
-            
-            // 处理表格
-            html = html.replace(/((?:\|.*\|(?:\r?\n|$))+)/g, (match) => {
-                const lines = match.trim().split('\n');
-                if (lines.length < 2) return match;
-                
-                const rows = lines.map(line => {
-                    const cleanLine = line.trim().replace(/^\||\|$/g, '');
-                    return cleanLine.split('|').map(cell => cell.trim());
-                });
-                
-                const hasHeaderSeparator = rows.length > 1 && 
-                    rows[1].every(cell => cell.replace(/[-:]/g, '').trim() === '');
-                
-                if (hasHeaderSeparator && rows.length >= 3) {
-                    const [header, separator, ...dataRows] = rows;
+            // Markdown 解析器
+            const markdownParser = {
+                // 内联元素处理
+                processInline(text) {
+                    if (!text) return '';
                     
-                    const alignments = separator.map(cell => {
-                        if (cell.startsWith(':') && cell.endsWith(':')) return 'center';
-                        if (cell.endsWith(':')) return 'right';
-                        return 'left';
-                    });
+                    // 使用预编译正则表达式
+                    const patterns = [
+                        [/\*\*\*(.*?)\*\*\*|___(.*?)___/g, '<strong><em>$1$2</em></strong>'],
+                        [/\*\*(.*?)\*\*|__(.*?)__/g, '<strong>$1$2</strong>'],
+                        [/\*(.*?)\*|_(.*?)_/g, '<em>$1$2</em>'],
+                        [/~~(.*?)~~/g, '<del>$1</del>'],
+                        [/`([^`]+)`/g, '<code>$1</code>'],
+                        [/\[([^\]]+)\]\(([^)"\s]+)(?:\s+"([^"]+)")?\)/g, 
+                            (_, text, url, title) => `<a href="${url}"${title ? ` title="${title}"` : ''} target="_blank">${text}</a>`],
+                        [/!\[([^\]]*)\]\(([^)"\s]+)(?:\s+"([^"]+)")?\)/g,
+                            (_, alt, src, title) => `<img src="${src}" alt="${alt}"${title ? ` title="${title}"` : ''} loading="lazy">`],
+                        [/<([^>]+)>/g, (_, url) => {
+                            if (/^https?:\/\//.test(url)) return `<a href="${url}" target="_blank">${url}</a>`;
+                            if (/^mailto:/.test(url)) return `<a href="${url}">${url.substring(7)}</a>`;
+                            return `<${url}>`;
+                        }]
+                    ];
                     
-                    let tableHtml = '<table>\n<thead>\n<tr>\n';
-                    
-                    header.forEach((cell, i) => {
-                        const align = alignments[i] || 'left';
-                        tableHtml += `<th align="${align}">${processInlineMarkdown(cell)}</th>\n`;
-                    });
-                    
-                    tableHtml += '</tr>\n</thead>\n<tbody>\n';
-                    
-                    dataRows.forEach(row => {
-                        tableHtml += '<tr>\n';
-                        row.forEach((cell, i) => {
-                            const align = alignments[i] || 'left';
-                            tableHtml += `<td align="${align}">${processInlineMarkdown(cell)}</td>\n`;
-                        });
-                        tableHtml += '</tr>\n';
-                    });
-                    
-                    tableHtml += '</tbody>\n</table>';
-                    return tableHtml;
-                } else if (rows.length >= 1) {
-                    let tableHtml = '<table>\n<tbody>\n';
-                    
-                    rows.forEach(row => {
-                        tableHtml += '<tr>\n';
-                        row.forEach(cell => {
-                            tableHtml += `<td>${processInlineMarkdown(cell)}</td>\n`;
-                        });
-                        tableHtml += '</tr>\n';
-                    });
-                    
-                    tableHtml += '</tbody>\n</table>';
-                    return tableHtml;
-                }
+                    return patterns.reduce((result, [regex, replacement]) => {
+                        return result.replace(regex, replacement);
+                    }, text);
+                },
                 
-                return match;
-            });
-            
-            // 处理块级元素
-            const lines = html.split('\n');
-            let result = [];
-            let inBlockquote = false;
-            let inList = false;
-            let listType = '';
-            let inPre = false;
-            
-            for (let i = 0; i < lines.length; i++) {
-                let line = lines[i];
-                const trimmed = line.trim();
+                // 生成缓存键
+                getCacheKey(text) {
+                    return text.length < 1000 ? text : text.substring(0, 500) + text.length + text.substring(text.length - 500);
+                },
                 
-                if (line.includes('<pre>')) {
-                    inPre = true;
-                    result.push(line);
-                    continue;
-                }
-                if (line.includes('</pre>')) {
-                    inPre = false;
-                    result.push(line);
-                    continue;
-                }
-                if (inPre) {
-                    result.push(line);
-                    continue;
-                }
-                
-                if (line.includes('<table>')) {
-                    result.push(line);
-                    while (i < lines.length && !lines[i].includes('</table>')) {
-                        i++;
-                        if (i < lines.length) result.push(lines[i]);
-                    }
-                    continue;
-                }
-                
-                // 处理标题
-                if (trimmed.match(/^#{1,6}\s/)) {
-                    const level = trimmed.match(/^(#{1,6})/)[1].length;
-                    const title = trimmed.substring(level).trim();
-                    result.push(`<h${level}>${processInlineMarkdown(title)}</h${level}>`);
-                    continue;
-                }
-                
-                // 处理水平线
-                if (trimmed.match(/^[-*_]{3,}$/)) {
-                    result.push('<hr>');
-                    continue;
-                }
-                
-                // 处理引用块
-                if (trimmed.startsWith('>')) {
-                    if (!inBlockquote) {
-                        result.push('<blockquote>');
-                        inBlockquote = true;
-                    }
-                    const content = trimmed.substring(1).trim();
-                    result.push(`<p>${processInlineMarkdown(content)}</p>`);
+                // 解析完整 Markdown
+                parse(text) {
+                    if (!text) return '';
                     
-                    const nextLine = i + 1 < lines.length ? lines[i + 1].trim() : '';
-                    if (!nextLine.startsWith('>')) {
-                        result.push('</blockquote>');
-                        inBlockquote = false;
-                    }
-                    continue;
-                } else if (inBlockquote) {
-                    result.push('</blockquote>');
-                    inBlockquote = false;
-                }
-                
-                // 处理列表
-                const listMatch = trimmed.match(/^(\s*)([-*+]|\d+\.)\s+(.*)/);
-                if (listMatch) {
-                    const [, indent, marker, content] = listMatch;
-                    const isOrdered = /^\d+\.$/.test(marker);
-                    const currentListType = isOrdered ? 'ol' : 'ul';
+                    const now = Date.now();
+                    const cacheKey = this.getCacheKey(text);
                     
-                    const taskMatch = content.match(/^\[(x| )\]\s+(.*)/i);
-                    let listContent = content;
-                    let checked = '';
-                    
-                    if (taskMatch) {
-                        const [, check, task] = taskMatch;
-                        checked = check.toLowerCase() === 'x' ? ' checked' : '';
-                        listContent = `<label class="task-list-item">
-                            <input type="checkbox" disabled${checked}>
-                            <span>${processInlineMarkdown(task)}</span>
-                        </label>`;
-                    } else {
-                        listContent = processInlineMarkdown(content);
+                    // 检查缓存
+                    const cached = state.cache.get(cacheKey);
+                    if (cached && now - cached.time < CONFIG.CACHE_EXPIRY) {
+                        return cached.html;
                     }
                     
-                    if (!inList || listType !== currentListType) {
-                        if (inList) {
+                    let html = text;
+                    
+                    // 处理代码块
+                    html = html.replace(/```[\s\S]*?```/g, (match) => {
+                        const codeMatch = match.match(/^```(\w*)\n([\s\S]*?)\n```$/);
+                        if (codeMatch) {
+                            const [, lang, code] = codeMatch;
+                            const escapedCode = utils.escapeHtml(code.trim());
+                            return `<pre><code class="language-${lang || 'text'}">${escapedCode}</code></pre>`;
+                        }
+                        return match;
+                    });
+                    
+                    // 处理表格
+                    const tableRegex = /^(\|.+\|(?:\r?\n|$))+/gm;
+                    html = html.replace(tableRegex, (match) => {
+                        const rows = match.trim().split('\n')
+                            .map(row => row.trim().replace(/^\||\|$/g, '').split('|').map(cell => cell.trim()));
+                        
+                        if (rows.length < 2) return match;
+                        
+                        const isSeparator = (cell) => /^:?-+:?$/.test(cell);
+                        const hasHeader = rows.length > 1 && rows[1].every(isSeparator);
+                        
+                        let tableHtml = '<div class="table-container"><table>';
+                        
+                        if (hasHeader && rows.length >= 3) {
+                            const [header, , ...dataRows] = rows;
+                            tableHtml += `<thead><tr>${header.map(h => `<th>${this.processInline(h)}</th>`).join('')}</tr></thead>`;
+                            tableHtml += `<tbody>${dataRows.map(row => 
+                                `<tr>${row.map(cell => `<td>${this.processInline(cell)}</td>`).join('')}</tr>`
+                            ).join('')}</tbody>`;
+                        } else {
+                            tableHtml += `<tbody>${rows.map(row => 
+                                `<tr>${row.map(cell => `<td>${this.processInline(cell)}</td>`).join('')}</tr>`
+                            ).join('')}</tbody>`;
+                        }
+                        
+                        tableHtml += '</table></div>';
+                        return tableHtml;
+                    });
+                    
+                    // 逐行处理
+                    const lines = html.split('\n');
+                    const result = [];
+                    let inBlockquote = false;
+                    let inList = false;
+                    let listType = '';
+                    let i = 0;
+                    
+                    while (i < lines.length) {
+                        const line = lines[i];
+                        
+                        // 跳过已处理的 HTML 块
+                        if (line.includes('<pre') || line.includes('<table') || line.includes('<div class="table-container"')) {
+                            result.push(line);
+                            i++;
+                            continue;
+                        }
+                        
+                        const trimmed = line.trim();
+                        
+                        // 标题
+                        const headingMatch = trimmed.match(/^(#{1,6})\s+(.+)/);
+                        if (headingMatch) {
+                            const [, hashes, content] = headingMatch;
+                            result.push(`<h${hashes.length}>${this.processInline(content)}</h${hashes.length}>`);
+                            i++;
+                            continue;
+                        }
+                        
+                        // 水平线
+                        if (/^[-*_]{3,}$/.test(trimmed)) {
+                            result.push('<hr>');
+                            i++;
+                            continue;
+                        }
+                        
+                        // 引用
+                        if (trimmed.startsWith('>')) {
+                            if (!inBlockquote) result.push('<blockquote>');
+                            result.push(`<p>${this.processInline(trimmed.substring(1).trim())}</p>`);
+                            inBlockquote = true;
+                            i++;
+                            continue;
+                        } else if (inBlockquote) {
+                            result.push('</blockquote>');
+                            inBlockquote = false;
+                        }
+                        
+                        // 列表
+                        const listMatch = trimmed.match(/^(\s*)([-*+]|\d+\.)\s+(.*)/);
+                        if (listMatch) {
+                            const [, , marker, content] = listMatch;
+                            const type = /^\d+\.$/.test(marker) ? 'ol' : 'ul';
+                            
+                            if (!inList || listType !== type) {
+                                if (inList) result.push(`</${listType}>`);
+                                result.push(`<${type}>`);
+                                inList = true;
+                                listType = type;
+                            }
+                            
+                            // 任务列表
+                            const taskMatch = content.match(/^\[(x|\s)\]\s+(.*)/i);
+                            if (taskMatch) {
+                                const checked = taskMatch[1].toLowerCase() === 'x';
+                                result.push(
+                                    `<li class="task-list-item">
+                                        <input type="checkbox" disabled${checked ? ' checked' : ''}>
+                                        <span>${this.processInline(taskMatch[2])}</span>
+                                    </li>`
+                                );
+                            } else {
+                                result.push(`<li>${this.processInline(content)}</li>`);
+                            }
+                            
+                            i++;
+                            continue;
+                        } else if (inList) {
                             result.push(`</${listType}>`);
+                            inList = false;
+                            listType = '';
                         }
-                        result.push(`<${currentListType}>`);
-                        inList = true;
-                        listType = currentListType;
-                    }
-                    
-                    result.push(`<li>${listContent}</li>`);
-                    
-                    const nextLine = i + 1 < lines.length ? lines[i + 1] : '';
-                    const nextListMatch = nextLine.match(/^(\s*)([-*+]|\d+\.)\s+/);
-                    if (!nextListMatch) {
-                        result.push(`</${listType}>`);
-                        inList = false;
-                        listType = '';
-                    }
-                    continue;
-                } else if (inList) {
-                    result.push(`</${listType}>`);
-                    inList = false;
-                    listType = '';
-                }
-                
-                // 处理段落
-                if (trimmed) {
-                    let paragraph = trimmed;
-                    let j = i + 1;
-                    
-                    while (j < lines.length) {
-                        const nextTrimmed = lines[j].trim();
-                        if (!nextTrimmed || 
-                            nextTrimmed.match(/^#{1,6}\s|^[-*_]{3,}$|^>|^(\s*)([-*+]|\d+\.)\s+/) ||
-                            lines[j].includes('<')) {
-                            break;
+                        
+                        // 段落
+                        if (trimmed) {
+                            let paragraph = trimmed;
+                            let j = i + 1;
+                            
+                            // 合并连续的非空行
+                            while (j < lines.length && lines[j].trim() && 
+                                   !lines[j].trim().match(/^#{1,6}\s|^[-*_]{3,}$|^>|^(\s*)([-*+]|\d+\.)\s+/)) {
+                                paragraph += ' ' + lines[j].trim();
+                                j++;
+                            }
+                            
+                            result.push(`<p>${this.processInline(paragraph)}</p>`);
+                            i = j;
+                        } else {
+                            result.push('');
+                            i++;
                         }
-                        paragraph += ' ' + nextTrimmed;
-                        j++;
                     }
                     
-                    i = j - 1;
-                    result.push(`<p>${processInlineMarkdown(paragraph)}</p>`);
-                } else {
-                    result.push('');
+                    // 闭合未结束的标签
+                    if (inBlockquote) result.push('</blockquote>');
+                    if (inList) result.push(`</${listType}>`);
+                    
+                    const finalHtml = result.join('\n').replace(/(<p>\s*<\/p>)/g, '');
+                    
+                    // 更新缓存
+                    state.cache.set(cacheKey, {
+                        html: finalHtml,
+                        time: now
+                    });
+                    
+                    // 清理过期缓存
+                    if (now - state.lastCacheTime > CONFIG.CACHE_EXPIRY) {
+                        for (const [key, value] of state.cache.entries()) {
+                            if (now - value.time > CONFIG.CACHE_EXPIRY) {
+                                state.cache.delete(key);
+                            }
+                        }
+                        state.lastCacheTime = now;
+                    }
+                    
+                    return finalHtml;
                 }
-            }
+            };
             
-            html = result.join('\n');
-            html = html.replace(/<p><\/p>/g, '');
-            
-            return html;
-        }
-        
-        // 更新预览（带防抖）
-        const updatePreviewDebounced = debounce(() => {
-            if (isComposing) return; // 中文输入法输入中不更新
-            
-            const content = document.getElementById('editor').value;
-            document.getElementById('preview').innerHTML = parseMarkdownWithCache(content);
-        }, isWeChat ? 200 : 150); // 微信中延迟更大
-        
-        function updatePreview() {
-            updatePreviewDebounced();
-        }
-        
-        // 显示保存状态
-        function showSaveStatus(message) {
-            const status = document.getElementById('saveStatus');
-            status.textContent = message;
-            status.classList.add('show');
-            
-            setTimeout(() => {
-                status.classList.remove('show');
-            }, 1500);
-        }
-        
-        // 保存文件
-        async function saveFile() {
-            const content = document.getElementById('editor').value;
-            
-            if (content === currentContent) {
-                return;
-            }
-            
-            try {
-                const response = await fetch(currentFile, {
-                    method: 'PUT',
-                    body: content,
-                    headers: {
-                        'Content-Type': 'text/markdown'
+            // 文件操作
+            const fileManager = {
+                async save() {
+                    const content = elements.editor.value;
+                    if (content === state.currentContent || !state.currentFile) return;
+                    
+                    try {
+                        const response = await fetch(state.currentFile, {
+                            method: 'PUT',
+                            body: content,
+                            headers: { 
+                                'Content-Type': 'text/markdown',
+                                'Cache-Control': 'no-cache'
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            state.currentContent = content;
+                            utils.showSaveStatus('已保存');
+                        } else {
+                            utils.showSaveStatus('保存失败');
+                        }
+                    } catch (error) {
+                        console.error('保存失败:', error);
+                        utils.showSaveStatus('保存失败');
                     }
-                });
+                },
                 
-                if (response.ok) {
-                    currentContent = content;
-                    showSaveStatus('已保存');
-                } else {
-                    showSaveStatus('保存失败');
+                async load(filename, isEditMode) {
+                    utils.setLoading(true);
+                    
+                    try {
+                        const response = await fetch(filename, {
+                            headers: { 'Cache-Control': 'no-cache' }
+                        });
+                        
+                        const content = response.ok ? await response.text() : '';
+                        
+                        if (isEditMode) {
+                            elements.editor.value = content || '# 新建文档\n\n开始编辑你的文档...';
+                            state.currentContent = elements.editor.value;
+                            updatePreview();
+                            elements.editMode.classList.remove('hidden');
+                            document.title = `编辑: ${filename}`;
+                        } else {
+                            elements.viewContent.innerHTML = response.ok ? 
+                                markdownParser.parse(content) : 
+                                `<h1>文件未找到</h1><p>请求的文件不存在：${filename}</p>`;
+                            elements.viewMode.classList.remove('hidden');
+                            document.title = response.ok ? 
+                                (content.split('\n')[0]?.replace(/^#\s*/, '') || filename) : '文件未找到';
+                        }
+                        
+                        state.currentFile = filename;
+                        state.isEditing = isEditMode;
+                    } catch (error) {
+                        console.error('加载失败:', error);
+                        
+                        if (isEditMode) {
+                            elements.editor.value = `# 加载失败\n\n无法加载文件: ${filename}`;
+                            state.currentContent = elements.editor.value;
+                            updatePreview();
+                            elements.editMode.classList.remove('hidden');
+                        } else {
+                            elements.viewContent.innerHTML = 
+                                `<h1>加载失败</h1><p>无法加载文件：${filename}</p>`;
+                            elements.viewMode.classList.remove('hidden');
+                        }
+                    } finally {
+                        utils.setLoading(false);
+                    }
+                },
+                
+                startAutoSave() {
+                    clearTimeout(state.saveTimer);
+                    const delay = state.isWeChat ? CONFIG.WECHAT_SAVE_DELAY : CONFIG.SAVE_DELAY;
+                    state.saveTimer = setTimeout(() => this.save(), delay);
                 }
-            } catch (error) {
-                console.error('保存失败:', error);
-                showSaveStatus('保存失败');
-            }
-        }
-        
-        // 开始自动保存计时
-        function startAutoSave() {
-            clearTimeout(saveTimer);
-            saveTimer = setTimeout(saveFile, isWeChat ? 10000 : 5000); // 微信中延长到10秒
-        }
-        
-        // 加载文件
-        async function loadFile(filename, isEditMode) {
-            try {
-                const response = await fetch(filename);
-                
-                if (response.ok) {
-                    const content = await response.text();
-                    
-                    if (isEditMode) {
-                        document.getElementById('editor').value = content;
-                        currentContent = content;
-                        updatePreview();
-                        
-                        document.getElementById('editMode').classList.remove('hidden');
-                        document.getElementById('viewMode').classList.add('hidden');
-                        
-                        document.title = `编辑: ${filename}`;
-                    } else {
-                        document.getElementById('viewContent').innerHTML = parseMarkdownWithCache(content);
-                        
-                        document.getElementById('viewMode').classList.remove('hidden');
-                        document.getElementById('editMode').classList.add('hidden');
-                        
-                        const firstLine = content.split('\n')[0] || filename;
-                        const title = firstLine.replace(/^#\s*/, '');
-                        document.title = title || '文档';
-                    }
-                    
-                    currentFile = filename;
-                    isEditing = isEditMode;
-                    
-                } else {
-                    if (isEditMode) {
-                        document.getElementById('editor').value = `# 新建文档\n\n开始编辑你的文档...`;
-                        currentContent = document.getElementById('editor').value;
-                        updatePreview();
-                        
-                        document.getElementById('editMode').classList.remove('hidden');
-                        document.getElementById('viewMode').classList.add('hidden');
-                        document.title = `新建: ${filename}`;
-                        currentFile = filename;
-                        isEditing = true;
-                    } else {
-                        document.getElementById('viewContent').innerHTML = 
-                            '<h1>文件未找到</h1><p>请求的文件不存在：' + filename + '</p>';
-                        document.getElementById('viewMode').classList.remove('hidden');
-                        document.getElementById('editMode').classList.add('hidden');
-                        document.title = '文件未找到';
-                    }
+            };
+            
+            // 预览更新
+            const updatePreview = utils.debounce(() => {
+                if (!state.isComposing) {
+                    const content = elements.editor.value;
+                    elements.preview.innerHTML = markdownParser.parse(content);
                 }
-            } catch (error) {
-                console.error('加载失败:', error);
+            }, state.isWeChat ? CONFIG.WECHAT_PREVIEW_DELAY : CONFIG.PREVIEW_DELAY);
+            
+            // 事件处理器
+            const eventHandlers = {
+                handleEditorInput() {
+                    if (!state.isComposing) updatePreview();
+                    fileManager.startAutoSave();
+                },
                 
-                if (isEditMode) {
-                    document.getElementById('editor').value = `# 加载失败\n\n无法加载文件: ${filename}\n\n请检查文件路径或网络连接。`;
-                    currentContent = document.getElementById('editor').value;
+                handleEditorBlur() {
+                    fileManager.save();
+                },
+                
+                handleCompositionStart() {
+                    state.isComposing = true;
+                },
+                
+                handleCompositionEnd() {
+                    state.isComposing = false;
                     updatePreview();
-                    document.getElementById('editMode').classList.remove('hidden');
-                    document.getElementById('viewMode').classList.add('hidden');
-                } else {
-                    document.getElementById('viewContent').innerHTML = 
-                        '<h1>加载失败</h1><p>无法加载文件：' + filename + '</p><p>请检查文件路径或网络连接。</p>';
-                    document.getElementById('viewMode').classList.remove('hidden');
-                    document.getElementById('editMode').classList.add('hidden');
-                }
-            }
-        }
-        
-        // 初始化
-        function init() {
-            // 检测微信浏览器
-            isWeChat = detectWeChat();
-            if (isWeChat) {
-                document.body.classList.add('wechat-optimized', 'wechat-mode');
-                document.body.style.webkitOverflowScrolling = 'touch';
-            }
-            
-            // 解析URL参数
-            const urlParams = new URLSearchParams(window.location.search);
-            const editParam = urlParams.get('edit');
-            const fileParam = urlParams.get('file');
-            
-            // 决定模式
-            if (editParam !== null) {
-                loadFile(editParam, true);
+                },
                 
-                const editor = document.getElementById('editor');
-                
-                // 中文输入法处理
-                editor.addEventListener('compositionstart', () => {
-                    isComposing = true;
-                });
-                
-                editor.addEventListener('compositionend', () => {
-                    isComposing = false;
-                    updatePreviewDebounced();
-                });
-                
-                // 输入事件处理
-                editor.addEventListener('input', () => {
-                    if (!isComposing) {
-                        updatePreviewDebounced();
-                    }
-                    startAutoSave();
-                });
-                
-                // 移动端优化
-                if ('ontouchstart' in window) {
-                    editor.style.fontSize = '16px';
-                }
-                
-                editor.addEventListener('blur', saveFile);
-                
-                // 添加滚动优化
-                const preview = document.getElementById('preview');
-                if (preview) {
-                    preview.classList.add('performance-optimized');
-                }
-                
-            } else if (fileParam !== null) {
-                loadFile(fileParam, false);
-            } else {
-                loadFile('README.md', false);
-            }
-            
-            // 添加页面卸载前的保存提示
-            window.addEventListener('beforeunload', (e) => {
-                if (isEditing) {
-                    const content = document.getElementById('editor').value;
-                    if (content !== currentContent) {
+                handleBeforeUnload(e) {
+                    if (state.isEditing && elements.editor.value !== state.currentContent) {
                         e.preventDefault();
-                        e.returnValue = '您有未保存的更改，确定要离开吗？';
-                        return e.returnValue;
+                        e.returnValue = '有未保存的更改，确定要离开吗？';
                     }
                 }
-            });
-        }
-        
-        // 页面加载完成后初始化
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
+            };
+            
+            // 初始化
+            function init() {
+                // 微信环境优化
+                if (state.isWeChat) {
+                    document.body.classList.add('wechat-mode');
+                }
+                
+                // 解析URL参数
+                const params = new URLSearchParams(window.location.search);
+                const editFile = params.get('edit');
+                const viewFile = params.get('file');
+                
+                // 设置事件监听器
+                if (editFile) {
+                    elements.editor.addEventListener('compositionstart', eventHandlers.handleCompositionStart);
+                    elements.editor.addEventListener('compositionend', eventHandlers.handleCompositionEnd);
+                    elements.editor.addEventListener('input', eventHandlers.handleEditorInput);
+                    elements.editor.addEventListener('blur', eventHandlers.handleEditorBlur);
+                    
+                    fileManager.load(editFile, true);
+                } else {
+                    fileManager.load(viewFile || 'README.md', false);
+                }
+                
+                // 页面卸载事件
+                window.addEventListener('beforeunload', eventHandlers.handleBeforeUnload);
+                
+                // 优化滚动性能
+                if ('scrollRestoration' in history) {
+                    history.scrollRestoration = 'manual';
+                }
+            }
+            
+            // 启动应用
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
     </script>
 </body>
 </html>
