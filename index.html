@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Markdown编辑器</title>
     <style>
         /* 基础重置 */
@@ -10,6 +10,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
         }
         
         body {
@@ -17,7 +19,9 @@
             line-height: 1.6;
             color: #333;
             background: #f8f9fa;
-            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-size-adjust: 100%;
         }
         
         /* 编辑模式容器 */
@@ -27,12 +31,22 @@
             height: 100vh;
             gap: 1px;
             background: #ddd;
+            transform: translateZ(0);
+            will-change: transform;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
         
         @media (max-width: 768px) {
             .editor-container {
                 grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
             }
+        }
+        
+        /* 微信特定优化 */
+        .wechat-optimized .editor-container {
+            -webkit-overflow-scrolling: touch;
         }
         
         /* 文本编辑区域 */
@@ -40,6 +54,7 @@
             background: white;
             padding: 20px;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         #editor {
@@ -52,6 +67,8 @@
             line-height: 1.5;
             outline: none;
             padding: 0;
+            background: white;
+            -webkit-overflow-scrolling: touch;
         }
         
         /* 预览区域 */
@@ -59,74 +76,64 @@
             background: white;
             padding: 1em;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         /* 只读预览模式 */
         .view-only {
             max-width: 800px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 20px 15px;
             background: white;
             min-height: 100vh;
+            -webkit-overflow-scrolling: touch;
         }
         
-        /* Markdown 样式 - 简洁专业 */
+        /* Markdown 样式 - 简化版提升性能 */
         .markdown-content {
             font-size: 1em;
-            line-height: 1.8;
+            line-height: 1.7;
         }
         
         .markdown-content h1 {
-            font-size: 2em;
-            margin: 1em 0 0.5em 0;
+            font-size: 1.8em;
+            margin: 0.8em 0 0.4em 0;
             color: #2c3e50;
-            padding-bottom: 0.3em;
-            border-bottom: 2px solid #eee;
+            padding-bottom: 0.2em;
+            border-bottom: 1px solid #eee;
         }
         
         .markdown-content h2 {
             font-size: 1.5em;
-            margin: 1.5em 0 0.5em 0;
+            margin: 1.2em 0 0.4em 0;
             color: #2c3e50;
-            padding-bottom: 0.3em;
+            padding-bottom: 0.2em;
             border-bottom: 1px solid #eee;
         }
         
         .markdown-content h3 {
-            font-size: 1.2em;
-            margin: 1.2em 0 0.5em 0;
+            font-size: 1.3em;
+            margin: 1em 0 0.3em 0;
             color: #2c3e50;
         }
         
         .markdown-content h4 {
             font-size: 1.1em;
-            margin: 1.1em 0 0.5em 0;
-            color: #2c3e50;
-        }
-        
-        .markdown-content h5 {
-            font-size: 1em;
-            margin: 1em 0 0.5em 0;
-            color: #2c3e50;
-        }
-        
-        .markdown-content h6 {
-            font-size: 0.9em;
-            margin: 0.9em 0 0.5em 0;
+            margin: 0.9em 0 0.3em 0;
             color: #2c3e50;
         }
         
         .markdown-content p {
-            margin: 1em 0;
+            margin: 0.8em 0;
         }
         
         .markdown-content ul, .markdown-content ol {
-            margin: 1em 0;
-            padding-left: 2em;
+            margin: 0.8em 0;
+            padding-left: 1.5em;
         }
         
         .markdown-content li {
-            margin: 0.5em 0;
+            margin: 0.4em 0;
         }
         
         .markdown-content strong {
@@ -139,17 +146,17 @@
         }
         
         .markdown-content blockquote {
-            border-left: 4px solid #4a6fa5;
-            padding: 0.5em 1em;
-            margin: 1em 0;
+            border-left: 3px solid #4a6fa5;
+            padding: 0.4em 0.8em;
+            margin: 0.8em 0;
             background: #f8f9fa;
             color: #555;
         }
         
         .markdown-content code {
             background: #f1f3f5;
-            padding: 2px 6px;
-            border-radius: 3px;
+            padding: 2px 4px;
+            border-radius: 2px;
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
             font-size: 0.9em;
         }
@@ -157,10 +164,11 @@
         .markdown-content pre {
             background: #2d3748;
             color: #e2e8f0;
-            padding: 1em;
-            border-radius: 6px;
+            padding: 0.8em;
+            border-radius: 4px;
             overflow-x: auto;
-            margin: 1em 0;
+            margin: 0.8em 0;
+            -webkit-overflow-scrolling: touch;
         }
         
         .markdown-content pre code {
@@ -169,18 +177,17 @@
             color: inherit;
         }
         
-        /* 表格样式 */
+        /* 简化表格样式 - 移除阴影提升性能 */
         .markdown-content table {
             border-collapse: collapse;
-            margin: 1em 0;
+            margin: 0.8em 0;
             width: 100%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
         .markdown-content table th,
         .markdown-content table td {
             border: 1px solid #e1e4e8;
-            padding: 0.75em 1em;
+            padding: 0.5em 0.8em;
             text-align: left;
         }
         
@@ -192,10 +199,6 @@
         
         .markdown-content table tr:nth-child(even) {
             background-color: #fafbfc;
-        }
-        
-        .markdown-content table tr:hover {
-            background-color: #f6f8fa;
         }
         
         /* 任务列表样式 */
@@ -218,18 +221,13 @@
         .markdown-content del {
             text-decoration: line-through;
             color: #6a737d;
-            background-color: #ffeef0;
-            padding: 0 0.2em;
-            border-radius: 2px;
         }
         
-        /* 图片样式 */
+        /* 简化图片样式 - 移除阴影提升性能 */
         .markdown-content img {
             max-width: 100%;
             height: auto;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin: 1em 0;
+            margin: 0.8em 0;
         }
         
         /* 链接样式 */
@@ -237,7 +235,6 @@
             color: #0366d6;
             text-decoration: none;
             border-bottom: 1px solid rgba(3, 102, 214, 0.2);
-            transition: all 0.2s ease;
         }
         
         .markdown-content a:hover {
@@ -248,8 +245,8 @@
         /* 水平线样式 */
         .markdown-content hr {
             border: none;
-            border-top: 2px solid #eaecef;
-            margin: 2.5em auto;
+            border-top: 1px solid #eaecef;
+            margin: 1.5em auto;
             width: 80%;
         }
         
@@ -258,14 +255,15 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            padding: 8px 16px;
+            padding: 6px 12px;
             background: rgba(74, 111, 165, 0.9);
             color: white;
-            border-radius: 4px;
-            font-size: 14px;
+            border-radius: 3px;
+            font-size: 13px;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.15s ease-out;
             pointer-events: none;
+            z-index: 1000;
         }
         
         .save-status.show {
@@ -284,6 +282,46 @@
             align-items: center;
             height: 100px;
             color: #666;
+        }
+        
+        /* 性能优化类 */
+        .performance-optimized {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .editor-area, .preview-area {
+                padding: 15px;
+            }
+            
+            #editor {
+                height: calc(50vh - 30px);
+                font-size: 16px; /* 防止iOS缩放 */
+            }
+            
+            .markdown-content {
+                font-size: 16px;
+            }
+            
+            .save-status {
+                bottom: 10px;
+                right: 10px;
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+        }
+        
+        /* 微信优化模式 */
+        .wechat-mode .markdown-content img,
+        .wechat-mode .markdown-content table {
+            box-shadow: none;
+        }
+        
+        .wechat-mode .markdown-content pre {
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
@@ -312,6 +350,28 @@
         let currentContent = '';
         let isEditing = false;
         let currentFile = '';
+        let isComposing = false; // 中文输入法状态
+        let isWeChat = false; // 是否是微信浏览器
+        let lastMarkdownText = ''; // 解析缓存
+        let lastParsedHtml = '';
+        
+        // 检测微信浏览器
+        function detectWeChat() {
+            return /micromessenger/i.test(navigator.userAgent);
+        }
+        
+        // 防抖函数
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
         
         // HTML转义
         function escapeHtml(text) {
@@ -326,7 +386,7 @@
             
             let result = text;
             
-            // 处理加粗和斜体（注意顺序：先处理三个，再处理两个，再处理一个）
+            // 处理加粗和斜体
             result = result.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
             result = result.replace(/___(.*?)___/g, '<strong><em>$1</em></strong>');
             
@@ -366,28 +426,32 @@
                 return match;
             });
             
-            // 处理邮箱地址
-            result = result.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, 
-                '<a href="mailto:$1">$1</a>');
-            
             return result;
         }
         
-        // 增强的Markdown解析器
+        // 优化版Markdown解析器（带缓存）
+        function parseMarkdownWithCache(text) {
+            if (text === lastMarkdownText && lastParsedHtml) {
+                return lastParsedHtml;
+            }
+            
+            lastMarkdownText = text;
+            lastParsedHtml = parseMarkdown(text);
+            return lastParsedHtml;
+        }
+        
+        // 基础Markdown解析
         function parseMarkdown(text) {
             if (!text) return '';
             
-            // 1. 处理代码块（先处理，避免内部内容被解析）
             let html = text;
             
-            // 处理围栏代码块 ```
+            // 处理代码块
             html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
-                // 检测语言类型
                 const lines = code.trim().split('\n');
                 let language = '';
                 let codeContent = code;
                 
-                // 检查第一行是否是语言声明
                 if (lines[0].match(/^[a-zA-Z0-9+#-]+$/)) {
                     language = lines[0].trim();
                     codeContent = lines.slice(1).join('\n').trim();
@@ -401,31 +465,22 @@
                 return '<code>' + escapeHtml(line) + '</code>';
             });
             
-            // 2. 处理表格
-            html = html.replace(/^\|(.+)\|$/gm, (match, row) => {
-                return match; // 先标记，稍后处理整个表格
-            });
-            
-            // 实际表格处理
+            // 处理表格
             html = html.replace(/((?:\|.*\|(?:\r?\n|$))+)/g, (match) => {
                 const lines = match.trim().split('\n');
-                if (lines.length < 2) return match; // 不是表格
+                if (lines.length < 2) return match;
                 
                 const rows = lines.map(line => {
-                    // 清理行首尾的管道符
                     const cleanLine = line.trim().replace(/^\||\|$/g, '');
                     return cleanLine.split('|').map(cell => cell.trim());
                 });
                 
-                // 检查是否有表头分隔线
                 const hasHeaderSeparator = rows.length > 1 && 
                     rows[1].every(cell => cell.replace(/[-:]/g, '').trim() === '');
                 
                 if (hasHeaderSeparator && rows.length >= 3) {
-                    // 是完整表格：表头 + 分隔线 + 数据行
                     const [header, separator, ...dataRows] = rows;
                     
-                    // 解析对齐方式
                     const alignments = separator.map(cell => {
                         if (cell.startsWith(':') && cell.endsWith(':')) return 'center';
                         if (cell.endsWith(':')) return 'right';
@@ -434,7 +489,6 @@
                     
                     let tableHtml = '<table>\n<thead>\n<tr>\n';
                     
-                    // 表头
                     header.forEach((cell, i) => {
                         const align = alignments[i] || 'left';
                         tableHtml += `<th align="${align}">${processInlineMarkdown(cell)}</th>\n`;
@@ -442,7 +496,6 @@
                     
                     tableHtml += '</tr>\n</thead>\n<tbody>\n';
                     
-                    // 数据行
                     dataRows.forEach(row => {
                         tableHtml += '<tr>\n';
                         row.forEach((cell, i) => {
@@ -455,7 +508,6 @@
                     tableHtml += '</tbody>\n</table>';
                     return tableHtml;
                 } else if (rows.length >= 1) {
-                    // 简单表格（无表头分隔线）
                     let tableHtml = '<table>\n<tbody>\n';
                     
                     rows.forEach(row => {
@@ -473,19 +525,18 @@
                 return match;
             });
             
-            // 3. 处理块级元素
+            // 处理块级元素
             const lines = html.split('\n');
             let result = [];
             let inBlockquote = false;
             let inList = false;
-            let listType = ''; // 'ul' or 'ol'
+            let listType = '';
             let inPre = false;
             
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i];
                 const trimmed = line.trim();
                 
-                // 跳过已处理的代码块
                 if (line.includes('<pre>')) {
                     inPre = true;
                     result.push(line);
@@ -501,10 +552,8 @@
                     continue;
                 }
                 
-                // 跳过已处理的表格
                 if (line.includes('<table>')) {
                     result.push(line);
-                    // 找到表格结束
                     while (i < lines.length && !lines[i].includes('</table>')) {
                         i++;
                         if (i < lines.length) result.push(lines[i]);
@@ -535,7 +584,6 @@
                     const content = trimmed.substring(1).trim();
                     result.push(`<p>${processInlineMarkdown(content)}</p>`);
                     
-                    // 检查下一行是否还是引用
                     const nextLine = i + 1 < lines.length ? lines[i + 1].trim() : '';
                     if (!nextLine.startsWith('>')) {
                         result.push('</blockquote>');
@@ -553,9 +601,7 @@
                     const [, indent, marker, content] = listMatch;
                     const isOrdered = /^\d+\.$/.test(marker);
                     const currentListType = isOrdered ? 'ol' : 'ul';
-                    const indentLevel = indent.length;
                     
-                    // 检查任务列表
                     const taskMatch = content.match(/^\[(x| )\]\s+(.*)/i);
                     let listContent = content;
                     let checked = '';
@@ -582,7 +628,6 @@
                     
                     result.push(`<li>${listContent}</li>`);
                     
-                    // 检查下一行是否还是列表
                     const nextLine = i + 1 < lines.length ? lines[i + 1] : '';
                     const nextListMatch = nextLine.match(/^(\s*)([-*+]|\d+\.)\s+/);
                     if (!nextListMatch) {
@@ -599,7 +644,6 @@
                 
                 // 处理段落
                 if (trimmed) {
-                    // 合并连续的行为段落
                     let paragraph = trimmed;
                     let j = i + 1;
                     
@@ -617,24 +661,26 @@
                     i = j - 1;
                     result.push(`<p>${processInlineMarkdown(paragraph)}</p>`);
                 } else {
-                    // 空行
                     result.push('');
                 }
             }
             
-            // 清理并合并结果
             html = result.join('\n');
-            
-            // 清理空段落
             html = html.replace(/<p><\/p>/g, '');
             
             return html;
         }
         
-        // 更新预览
-        function updatePreview() {
+        // 更新预览（带防抖）
+        const updatePreviewDebounced = debounce(() => {
+            if (isComposing) return; // 中文输入法输入中不更新
+            
             const content = document.getElementById('editor').value;
-            document.getElementById('preview').innerHTML = parseMarkdown(content);
+            document.getElementById('preview').innerHTML = parseMarkdownWithCache(content);
+        }, isWeChat ? 200 : 150); // 微信中延迟更大
+        
+        function updatePreview() {
+            updatePreviewDebounced();
         }
         
         // 显示保存状态
@@ -645,7 +691,7 @@
             
             setTimeout(() => {
                 status.classList.remove('show');
-            }, 2000);
+            }, 1500);
         }
         
         // 保存文件
@@ -653,7 +699,7 @@
             const content = document.getElementById('editor').value;
             
             if (content === currentContent) {
-                return; // 内容未改变，不保存
+                return;
             }
             
             try {
@@ -680,7 +726,7 @@
         // 开始自动保存计时
         function startAutoSave() {
             clearTimeout(saveTimer);
-            saveTimer = setTimeout(saveFile, 5000); // 5秒后自动保存
+            saveTimer = setTimeout(saveFile, isWeChat ? 10000 : 5000); // 微信中延长到10秒
         }
         
         // 加载文件
@@ -692,26 +738,20 @@
                     const content = await response.text();
                     
                     if (isEditMode) {
-                        // 编辑模式
                         document.getElementById('editor').value = content;
                         currentContent = content;
                         updatePreview();
                         
-                        // 设置编辑模式
                         document.getElementById('editMode').classList.remove('hidden');
                         document.getElementById('viewMode').classList.add('hidden');
                         
-                        // 更新页面标题
                         document.title = `编辑: ${filename}`;
                     } else {
-                        // 只读模式
-                        document.getElementById('viewContent').innerHTML = parseMarkdown(content);
+                        document.getElementById('viewContent').innerHTML = parseMarkdownWithCache(content);
                         
-                        // 设置只读模式
                         document.getElementById('viewMode').classList.remove('hidden');
                         document.getElementById('editMode').classList.add('hidden');
                         
-                        // 更新页面标题
                         const firstLine = content.split('\n')[0] || filename;
                         const title = firstLine.replace(/^#\s*/, '');
                         document.title = title || '文档';
@@ -721,9 +761,7 @@
                     isEditing = isEditMode;
                     
                 } else {
-                    // 文件不存在
                     if (isEditMode) {
-                        // 编辑模式下创建新文件
                         document.getElementById('editor').value = `# 新建文档\n\n开始编辑你的文档...`;
                         currentContent = document.getElementById('editor').value;
                         updatePreview();
@@ -734,7 +772,6 @@
                         currentFile = filename;
                         isEditing = true;
                     } else {
-                        // 查看模式下文件不存在，显示错误
                         document.getElementById('viewContent').innerHTML = 
                             '<h1>文件未找到</h1><p>请求的文件不存在：' + filename + '</p>';
                         document.getElementById('viewMode').classList.remove('hidden');
@@ -762,35 +799,80 @@
         
         // 初始化
         function init() {
+            // 检测微信浏览器
+            isWeChat = detectWeChat();
+            if (isWeChat) {
+                document.body.classList.add('wechat-optimized', 'wechat-mode');
+                document.body.style.webkitOverflowScrolling = 'touch';
+            }
+            
             // 解析URL参数
             const urlParams = new URLSearchParams(window.location.search);
             const editParam = urlParams.get('edit');
             const fileParam = urlParams.get('file');
             
-            // 决定模式 - 默认加载 README.md（只读模式）
+            // 决定模式
             if (editParam !== null) {
-                // 编辑模式
                 loadFile(editParam, true);
                 
-                // 设置编辑器事件
                 const editor = document.getElementById('editor');
+                
+                // 中文输入法处理
+                editor.addEventListener('compositionstart', () => {
+                    isComposing = true;
+                });
+                
+                editor.addEventListener('compositionend', () => {
+                    isComposing = false;
+                    updatePreviewDebounced();
+                });
+                
+                // 输入事件处理
                 editor.addEventListener('input', () => {
-                    updatePreview();
+                    if (!isComposing) {
+                        updatePreviewDebounced();
+                    }
                     startAutoSave();
                 });
                 
+                // 移动端优化
+                if ('ontouchstart' in window) {
+                    editor.style.fontSize = '16px';
+                }
+                
                 editor.addEventListener('blur', saveFile);
+                
+                // 添加滚动优化
+                const preview = document.getElementById('preview');
+                if (preview) {
+                    preview.classList.add('performance-optimized');
+                }
+                
             } else if (fileParam !== null) {
-                // 只读模式（指定文件）
                 loadFile(fileParam, false);
             } else {
-                // 默认模式：加载 README.md（只读）
                 loadFile('README.md', false);
             }
+            
+            // 添加页面卸载前的保存提示
+            window.addEventListener('beforeunload', (e) => {
+                if (isEditing) {
+                    const content = document.getElementById('editor').value;
+                    if (content !== currentContent) {
+                        e.preventDefault();
+                        e.returnValue = '您有未保存的更改，确定要离开吗？';
+                        return e.returnValue;
+                    }
+                }
+            });
         }
         
         // 页面加载完成后初始化
-        window.addEventListener('DOMContentLoaded', init);
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 </html>
